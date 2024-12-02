@@ -12,6 +12,14 @@ dotenv.config({
 
 
 connectDB() 
+.then(()=>{
+    app.listen(process.env.PORT || 8000,()=>{
+        ContentVisibilityAutoStateChangeEvent.log(`Server is running at port ${process.env.PORT}`)
+    } )
+})
+.catch((error)=>{
+ console.log("MONGODB connection error",error);    
+})
 
 
 
