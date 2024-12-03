@@ -1,24 +1,25 @@
 
 import dotenv from "dotenv";
+import express from "express";
 import connectDB from "./db/index.js";
 dotenv.config({
     path:"./.env"
 });
 
 
+let app =express();
 
-
-
+let PORT =process.env.PORT || 8000;
 
 
 connectDB() 
 .then(()=>{
-    app.listen(process.env.PORT || 8000,()=>{
-        ContentVisibilityAutoStateChangeEvent.log(`Server is running at port ${process.env.PORT}`)
+    app.listen(process.env.PORT ,()=>{
+        console.log(`Server is running at port ${PORT}`)
     } )
 })
 .catch((error)=>{
- console.log("MONGODB connection error",error);    
+ console.log("MONGODB connection errorr",error);    
 })
 
 
