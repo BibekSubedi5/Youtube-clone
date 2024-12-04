@@ -14,7 +14,7 @@ const uploadOnCloudinary=async (file)=>{
             resource_type:"auto",
          }); 
          console.log("FIle has been Uploaded",response.url)
-         return response.url
+         return response
         
     } catch (error) {
         fs.unlinkSync(file);  //remove tempory file if upload get error
