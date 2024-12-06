@@ -90,6 +90,8 @@ userSchema.methods.isPasswordMatched=async function(password){
     {expiresIn:process.env.REFRESH_TOKEN_EXPIRY}
    }
 
+   
+
 
 
 export const  User =mongoose.model("User",userSchema);
