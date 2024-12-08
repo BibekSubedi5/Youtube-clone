@@ -1,8 +1,10 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.models.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
+
+
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -81,9 +83,9 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, username, password } = req.body();
+  const { email, username, password } = req.body;
 
-  if (!username || !email) {
+  if (!username && !email) {
     throw new ApiError(400, "username or email is required");
   }
 
@@ -105,8 +107,7 @@ const loginUser = asyncHandler(async (req, res) => {
     user._id
   );
 
-  const loggedInUser = await user
-    .findById(user._id)
+  const loggedInUser = await User.findById(user._id)
     .select("-password -refreshToken");
 
   const options = {
@@ -148,7 +149,7 @@ const logoutUser= asyncHandler(async(req,res)=>{
   return res
   .status(200)
   .clearCookie("accessToken", options)
-  .clearCookie("refrshToken", options)
+  .clearCookie("refreshToken", options)
   .json(new ApiResponse(200, {},"User loggedOut"))
 
 })
