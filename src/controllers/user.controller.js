@@ -103,31 +103,56 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     user._id
-  )
+  );
 
-   const loggedInUser= await user.findById(user._id).
-   select("-password -refreshToken")
+  const loggedInUser = await user
+    .findById(user._id)
+    .select("-password -refreshToken");
 
-   const options={
-  httpOnly:true,
-  secure:true
-   }
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
 
-return res.status(200)
-.cookie("accessToken",accessToken,options)
-.cookie("refreshToken",refreshToken,options)
-.json(
-  new ApiResponse(
-    200,
-{    user: loggedInUser, refreshToken, accessToken},
-    "User loggedIn Succesfully"
-  )
-)
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(
+        200,
+        { user: loggedInUser, refreshToken, accessToken },
+        "User loggedIn Succesfully"
+      )
+    )
 
-
-
+   
 });
-export { registerUser, loginUser };
+const logoutUser= asyncHandler(async(req,res)=>{
+  await User.findByIdAndUpdate(
+   req.user._id,
+   {
+    $set:{
+      refreshToken:undefined,
+    }
+    } ,
+    {
+      new:true
+    
+   }
+  )
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+  return res
+  .status(200)
+  .clearCookie("accessToken", options)
+  .clearCookie("refrshToken", options)
+  .json(new ApiResponse(200, {},"User loggedOut"))
+
+})
+export { registerUser, loginUser, logoutUser};
 
 //get  user Details from frontend
 //validation-not empty
