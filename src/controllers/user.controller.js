@@ -4,6 +4,7 @@ import { User } from "../models/user.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -381,6 +382,16 @@ const getUserChannelProfile= asyncHandler(async()=>{
      .json(new ApiResponse(200,channel[0],"User channel fetched sucessfully"))
 })
 
+ const getWatchHistory = asyncHandler(async(req,res)=>{
+  const user= await User.aggregate([
+    {
+      $match:{
+        _id: new mongoose.Types.ObjectId(req.user._id)
+
+      }
+    }
+  ])
+ }) 
 export {
   registerUser,
   loginUser,
@@ -390,7 +401,8 @@ export {
   getCurrentUser,
   updateAcountDetails,
   updateUserCover,
-  updateUserAvatar
+  updateUserAvatar,
+  getUserChannelProfile
 };
 
 //get  user Details from frontend
